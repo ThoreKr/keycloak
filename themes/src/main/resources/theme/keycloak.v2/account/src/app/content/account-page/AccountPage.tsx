@@ -38,7 +38,10 @@ interface FormFields {
     readonly firstName?: string;
     readonly lastName?: string;
     readonly email?: string;
-    attributes?: { locale?: [string] };
+    attributes?: {
+        locale?: [string],
+        profile_picture?: string,
+     };
 }
 
 interface AccountPageState {
@@ -216,6 +219,23 @@ export class AccountPage extends React.Component<AccountPageProps, AccountPageSt
                         >
                         </TextInput>
                     </FormGroup>
+                    <FormGroup
+                        label={Msg.localize('profilePicture')}
+                        fieldId="profile-picture"
+                    >
+                        <TextInput
+                            type="text"
+                            id="profile-picture"
+                            name="profilePicture"
+                            maxLength={254}
+                            value={fields.attributes!.profile_picture || ''}
+                            onChange={value => this.setState({
+                                errors: this.state.errors,
+                                formFields: { ...this.state.formFields, attributes: { ...this.state.formFields.attributes, profile_picture: value }}
+                            })}
+                        >
+                        </TextInput>
+                    </FormGroup>
                     {features.isInternationalizationEnabled && <FormGroup
                         label={Msg.localize('selectLocale')}
                         isRequired
@@ -248,7 +268,7 @@ export class AccountPage extends React.Component<AccountPageProps, AccountPageSt
                     </ActionGroup>
                 </Form>
 
-           { this.isDeleteAccountAllowed && 
+           { this.isDeleteAccountAllowed &&
             <div id="delete-account" style={{marginTop:"30px"}}>
              <Expandable toggleText="Delete Account">
                  <Grid gutter={"sm"}>
@@ -267,8 +287,8 @@ export class AccountPage extends React.Component<AccountPageProps, AccountPageSt
                         <GridItem span={2}>
                         </GridItem>
                     </Grid>
-                                
-              </Expandable> 
+
+              </Expandable>
               </div>}
             </ContentPage>
         );
